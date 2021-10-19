@@ -11,6 +11,7 @@ local buf_icon = {
   dbui = "  ",
   NeogitStatus = "  ",
   NvimTree = "  ",
+  netrw = "  ",
 }
 
 buffer.get_buffer_type_icon = function()
