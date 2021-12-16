@@ -1,5 +1,7 @@
 local diagnostic = {}
 
+local is_nvim_05 = vim.version().minor == 5
+
 -- coc diagnostic
 local function get_coc_diagnostic(diag_type)
 	local coc_diag_types = {
@@ -25,7 +27,14 @@ local function get_nvim_lsp_diagnostic(diag_type)
 	local active_clients = vim.lsp.get_active_clients()
 
 	if active_clients then
-		local count = #vim.diagnostic.get(vim.api.nvim_get_current_buf(), { severity = diag_type })
+		local count
+		if is_nvim_05 then
+            for _, client in ipairs(active_clients) do
+                count = count + vim.lsp.diagnosstic.get_count(vim.api.nvim_get_current_buf(), diag_type, client.id)
+            end
+		else
+		    count = #vim.diagnostic.get(vim.api.nvim_get_current_buf(), { severity = diag_type })
+        end
 
 		if count ~= 0 then
 			return count
@@ -54,19 +63,19 @@ local function get_formatted_diagnostic(diag_type)
 end
 
 diagnostic.get_diagnostic_error = function()
-	return get_formatted_diagnostic(vim.diagnostic.severity.ERROR)
+	return get_formatted_diagnostic(is_nvim_05 and "Error" or vim.diagnostic.severity.ERROR)
 end
 
 diagnostic.get_diagnostic_warn = function()
-	return get_formatted_diagnostic(vim.diagnostic.severity.WARN)
+	return get_formatted_diagnostic(is_nvim_05 and "Warning" or vim.diagnostic.severity.WARN)
 end
 
 diagnostic.get_diagnostic_hint = function()
-	return get_formatted_diagnostic(vim.diagnostic.severity.HINT)
+	return get_formatted_diagnostic(is_nvim_05 and "Hint" or vim.diagnostic.severity.HINT)
 end
 
 diagnostic.get_diagnostic_info = function()
-	return get_formatted_diagnostic(vim.diagnostic.severity.INFO)
+	return get_formatted_diagnostic(is_nvim_05 and "Information" or vim.diagnostic.severity.INFO)
 end
 
 return diagnostic
