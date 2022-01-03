@@ -30,7 +30,7 @@ local function get_nvim_lsp_diagnostic(diag_type)
 		local count
 		if is_nvim_05 then
             for _, client in ipairs(active_clients) do
-                count = count + vim.lsp.diagnosstic.get_count(vim.api.nvim_get_current_buf(), diag_type, client.id)
+                count = count + vim.lsp.diagnostic.get_count(vim.api.nvim_get_current_buf(), diag_type, client.id)
             end
 		else
 		    count = #vim.diagnostic.get(vim.api.nvim_get_current_buf(), { severity = diag_type })
