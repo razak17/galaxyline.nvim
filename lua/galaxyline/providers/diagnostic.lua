@@ -20,6 +20,7 @@ end
 
 -- nvim-lspconfig
 -- see https://github.com/neovim/nvim-lspconfig
+-- @return integer
 local function get_nvim_lsp_diagnostic(diag_type)
 	if next(vim.lsp.buf_get_clients(0)) == nil then
 		return ""
@@ -36,9 +37,7 @@ local function get_nvim_lsp_diagnostic(diag_type)
 		    count = #vim.diagnostic.get(vim.api.nvim_get_current_buf(), { severity = diag_type })
         end
 
-		if count ~= 0 then
-			return count
-		end
+	return count
 	end
 end
 
